@@ -10,9 +10,11 @@ Plug 'junegunn/fzf.vim'
 Plug 'dense-analysis/ale'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'puremourning/vimspector'
+Plug 'easymotion/vim-easymotion'
 Plug 'tpope/vim-obsession'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'morhetz/gruvbox'
+Plug 'hotoo/pangu.vim', { 'for': ['markdown', 'vimwiki', 'text'] }
 
 
 call plug#end()
@@ -23,8 +25,16 @@ if filereadable(expand('$VIMRUNTIME/defaults.vim'))
 	source $VIMRUNTIME/defaults.vim
 endif
 
+
+" Pangu Setting
+let g:pangu_rule_date = 1
+
 "regular settings
 "----------------
+" encoding/format
+set encoding=utf-8
+set fileformats=unix,dos,mac
+
 " ui
 set number
 set ruler
@@ -33,13 +43,11 @@ set showcmd
 set showmatch
 set laststatus=2
 set guifont=IBM_Plex_Mono:h12
+set guifontwide=Hiragino_Sans_GB:h14
 autocmd vimenter * ++nested colorscheme gruvbox
 set background=dark    " Setting dark mode
 
 
-" encoding/format
-set encoding=utf-8
-set fileformats=unix,dos,mac
 
 " searching
 set hlsearch
@@ -251,8 +259,44 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
+
+" 查找一个字符
+map  <Leader>i <Plug>(easymotion-bd-f)
+nmap <Leader>i <Plug>(easymotion-overwin-f)
+
+" 查找任意长度字符串
+" 好像比默认的"/"还方便
+nmap <leader>s <Plug>(easymotion-sn)
+
+" 跳到任意行
+omap <C-L> <Plug>(easymotion-bd-jk)
+nmap <C-L> <Plug>(easymotion-overwin-line)
+
+" 跳到任意单词
+omap <Leader>w <Plug>(easymotion-bd-w)
+nmap <Leader>w <Plug>(easymotion-overwin-w)
+
+" 单方向标记可以跳转的位置
+map <Leader>l <Plug>(easymotion-lineforward)
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+map <Leader>h <Plug>(easymotion-linebackward)
+
+" 以当前光标所在列为标记基准
+let g:EasyMotion_startofline = 0
+
+" 更聪明的大小写判断
+" 小写字母会匹配小写和大写
+" 大写字母只匹配大写
+let g:EasyMotion_smartcase = 1
+
+
 " autocmds
 "---------
+let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+
 augroup general
     autocmd!
     "keep equal proportions when windows resized
